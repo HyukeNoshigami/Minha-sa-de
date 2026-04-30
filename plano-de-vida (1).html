@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano de Transformação</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1114;
+    --surface: #181b20;
+    --surface2: #1f2329;
+    --border: #2a2f38;
+    --text: #e8e6e3;
+    --text-dim: #8b8d90;
+    --accent: #4ade80;
+    --accent-dim: #166534;
+    --warm: #f59e0b;
+    --warm-dim: #78350f;
+    --blue: #60a5fa;
+    --blue-dim: #1e3a5f;
+    --red: #f87171;
+    --purple: #c084fc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .hero {
+    padding: 60px 24px 40px;
+    text-align: center;
+    background: linear-gradient(180deg, #0f1114 0%, #111a12 50%, #0f1114 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(36px, 8vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    color: var(--text-dim);
+    max-width: 500px;
+    margin: 0 auto;
+    font-size: 15px;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 4px;
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { background: var(--surface); color: var(--text); }
+  .tab.active { background: var(--accent-dim); color: var(--accent); }
+
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-icon.green { background: var(--accent-dim); }
+  .card-icon.yellow { background: var(--warm-dim); }
+  .card-icon.blue { background: var(--blue-dim); }
+  .card-icon.red { background: #3b1a1a; }
+  .card-icon.purple { background: #2d1b4e; }
+
+  .card h3 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .card h3 small {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .card p, .card li {
+    color: var(--text-dim);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .card ul li {
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .card ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .time-block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .time-block:last-child { border-bottom: none; }
+
+  .time-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 60px;
+    padding-top: 2px;
+  }
+
+  .time-content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .time-content p {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .badge.green { background: var(--accent-dim); color: var(--accent); }
+  .badge.yellow { background: var(--warm-dim); color: var(--warm); }
+  .badge.blue { background: var(--blue-dim); color: var(--blue); }
+
+  .meal-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .meal-card {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .meal-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .meal-card .time {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .meal-card p {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .alert {
+    background: #1a1210;
+    border: 1px solid #5c3a1e;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .alert h4 {
+    color: var(--warm);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .alert p {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .verse {
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+    margin: 20px 0;
+    font-family: 'Instrument Serif', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .verse cite {
+    display: block;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dim);
+    font-style: normal;
+    margin-top: 8px;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+
+  .checklist label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+
+  .checklist label:last-child { border-bottom: none; }
+
+  .checklist input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .checklist input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .checklist input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .checklist label:has(input:checked) {
+    color: var(--accent);
+    text-decoration: line-through;
+    text-decoration-color: var(--accent-dim);
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .week-day {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .week-day h5 {
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .week-day p {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .motivation {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--accent-dim), transparent);
+    border-radius: 12px;
+    margin-top: 24px;
+  }
+
+  .motivation p {
+    font-family: 'Instrument Serif', serif;
+    font-size: 24px;
+    font-style: italic;
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 480px) {
+    .hero { padding: 40px 16px 30px; }
+    .content { padding: 24px 16px 60px; }
+    .stats { gap: 20px; }
+    .stat-value { font-size: 22px; }
+    .card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Plano de Transformação</div>
+  <h1>Uma nova <em>vida</em> começa<br>hoje.</h1>
+  <p>22 anos. 110kg → meta saudável. Hipertensão → pressão controlada. Sem desculpas, sem atalhos. Um dia de cada vez.</p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">110→85</div>
+      <div class="stat-label">Meta de peso (kg)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">12</div>
+      <div class="stat-label">Meses de jornada</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">🎯</div>
+      <div class="stat-label">Saúde & disciplina</div>
+    </div>
+  </div>
+  <p style="color:#8b8d90; font-size:14px; margin-top:24px; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.7; border-top:1px solid #2a2f38; padding-top:20px;">
+    <strong style="color:#4ade80;">Objetivo:</strong> Emagrecer, vencer a hipertensão e construir uma vida com propósito.<br>
+    <strong style="color:#f59e0b;">Meta de vida:</strong> Ser saudável, ter estabilidade, honrar a Deus e construir uma família.
+  </p>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-tab="rotina">🕐 Rotina Diária</button>
+  <button class="tab" data-tab="alimentacao">🥗 Alimentação</button>
+  <button class="tab" data-tab="treino">💪 Treino</button>
+  <button class="tab" data-tab="saude">❤️ Saúde</button>
+  <button class="tab" data-tab="espiritual">✝️ Vida Católica</button>
+  <button class="tab" data-tab="apologetica">📖 Apologética</button>
+  <button class="tab" data-tab="prospeccao">🎯 Prospecção</button>
+  <button class="tab" data-tab="financeiro">💰 Financeiro</button>
+  <button class="tab" data-tab="estudos">📚 Design & Estudos</button>
+  <button class="tab" data-tab="checklist">✅ Checklist</button>
+</div>
+
+<div class="content">
+
+  <!-- ROTINA DIÁRIA -->
+  <div class="section active" id="rotina">
+    <h2 class="section-title">Rotina Diária</h2>
+    <p class="section-subtitle">Sua estrutura de segunda a sexta. Disciplina é liberdade.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">☀️</div>
+        <h3>Manhã — O Fundamento<small>O dia se ganha ou se perde aqui</small></h3>
+      </div>
+      <div class="time-block">
+        <div class="time-label">5:30</div>
+        <div class="time-content">
+          <h4>Acordar + Água</h4>
+          <p>Beba 2 copos de água logo ao acordar. A hidratação ajuda a controlar a pressão e acelera o metabolismo. Nada de celular nos primeiros 30 min.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">5:45</div>
+        <div class="time-content">
+          <h4>Tempo com Deus</h4>
+          <p>Laudes + oração mental (10 min). Leitura espiritual: Imitação de Cristo (1 capítulo). Se tiver tempo, Rosário aqui — senão, faça na caminhada ou à noite.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">6:15</div>
+        <div class="time-content">
+          <h4>Café da manhã</h4>
+          <p>2 ovos mexidos + 1 fruta OU café com leite + pão integral. Coma com calma, sem tela.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">7:00</div>
+        <div class="time-content">
+          <h4>Preparação + deslocamento</h4>
+          <p>Banho, arrumação, sair de casa. Se possível, vá a pé — cada passo conta.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">🔥</div>
+        <h3>Dia — Trabalho & Produtividade<small>Ganhar o pão com dignidade</small></h3>
+      </div>
+      <div class="time-block">
+        <div class="time-label">8:00</div>
+        <div class="time-content">
+          <h4>Trabalho — Design & Social Media</h4>
+          <p>Foco total nas entregas dos clientes atuais. Photoshop aberto, celular no silencioso. Priorize: primeiro o que tem prazo, depois criação de portfólio. Se sobrar tempo, estude técnicas novas de design.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">11:00</div>
+        <div class="time-content">
+          <h4>Prospecção de clientes</h4>
+          <p>30-60 min dedicados APENAS a buscar novos clientes (ver aba Prospecção). Mande mensagens, visite comércios, poste no portfólio. Todo dia, sem falta.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">12:00</div>
+        <div class="time-content">
+          <h4>Almoço + Descanso</h4>
+          <p>Refeição principal do dia (ver aba Alimentação). Descanse 20 min depois. Evite doces e refrigerante — água sempre.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">13:00</div>
+        <div class="time-content">
+          <h4>Volta ao trabalho — Entregas + Criação</h4>
+          <p>Continue as artes dos clientes. Se terminou tudo, crie 1 post para seu próprio portfólio ou estude uma técnica nova no Photoshop. Nunca fique parado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">🌙</div>
+        <h3>Noite — Treino & Crescimento<small>Onde a transformação acontece</small></h3>
+      </div>
+      <div class="time-block">
+        <div class="time-label">18:00</div>
+        <div class="time-content">
+          <h4>Academia</h4>
+          <p>1h a 1h15 de treino (ver aba Treino). Sem pular. A academia é seu remédio contra hipertensão.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">19:30</div>
+        <div class="time-content">
+          <h4>Jantar leve</h4>
+          <p>Refeição leve — sopa, omelete, ou frango com legumes. Nada pesado antes de dormir.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">20:00</div>
+        <div class="time-content">
+          <h4>Estudos — Apologética + Formação</h4>
+          <p>45 min de lógica/catecismo/apologética (ver aba Apologética — Mês 1). 15 min de leitura espiritual (Imitação de Cristo). Celular no silencioso. Caderno de anotações aberto.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">21:00</div>
+        <div class="time-content">
+          <h4>Tempo livre + Higiene</h4>
+          <p>Relaxe, mas nada de ficar no celular até tarde. Prepare a roupa do dia seguinte.</p>
+        </div>
+      </div>
+      <div class="time-block">
+        <div class="time-label">22:00</div>
+        <div class="time-content">
+          <h4>Dormir</h4>
+          <p>Sono é sagrado. Dormir mal aumenta a pressão, dá fome e atrapalha o emagrecimento. 7-8h de sono, sem negociação.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALIMENTAÇÃO -->
+  <div class="section" id="alimentacao">
+    <h2 class="section-title">Alimentação</h2>
+    <p class="section-subtitle">Comida barata, nutritiva e que emagrece. Sem frescura, sem suplemento caro.</p>
+
+    <div class="alert">
+      <h4>⚠️ Regra de ouro para hipertenso</h4>
+      <p>REDUZA O SAL pela metade. Use limão, alho, cebola, coentro, pimenta pra dar sabor. Corte embutidos (salsicha, presunto, mortadela) e enlatados — eles disparam sua pressão. A toscana que você tem, use com moderação.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📋</div>
+        <h3>Com o que você tem agora<small>Rendendo ao máximo</small></h3>
+      </div>
+      <ul>
+        <li><strong>Frango (1kg):</strong> Divida em 4 porções de 250g. Cozinhe desfiado com cebola e alho — rende muito mais. Use no arroz, com legumes, em sopa.</li>
+        <li><strong>Carne moída (400g):</strong> Faça 2 refeições. Refogue com cebola, cenoura picadinha e batata. Vira um ensopado que rende pra 2-3 dias.</li>
+        <li><strong>Panceta (200g):</strong> Use pequenos pedaços como tempero em feijão ou sopa de legumes — NÃO coma como prato principal (muita gordura + sal).</li>
+        <li><strong>Toscana:</strong> Corte em rodelas finas e misture em arroz ou feijão pra dar sabor. Não coma inteira numa refeição.</li>
+        <li><strong>Legumes (cenoura, batata, cebola):</strong> Cenoura e batata na sopa e no ensopado. São baratos e matam a fome.</li>
+        <li><strong>Coentro:</strong> Use como tempero em tudo — dá sabor sem precisar de sal extra.</li>
+        <li><strong>Creme de leite:</strong> Use uma colher em sopas pra dar cremosidade. Não abuse.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">🛒</div>
+        <h3>Lista de compras inteligente<small>O que comprar com R$450/mês</small></h3>
+      </div>
+      <p style="margin-bottom:16px; font-size:14px; color:var(--text-dim)">Priorize esses alimentos — são os mais baratos e nutritivos que existem:</p>
+      <ul>
+        <li><strong>Ovos (4 dúzias):</strong> ~R$40. Proteína barata. 2-3 por dia = café da manhã garantido.</li>
+        <li><strong>Arroz (5kg):</strong> ~R$22. Base de tudo.</li>
+        <li><strong>Feijão (3kg):</strong> ~R$24. Proteína + ferro + fibra. Combo arroz+feijão é um dos alimentos mais completos do mundo.</li>
+        <li><strong>Frango (4kg coxa/sobrecoxa):</strong> ~R$50. Parte mais barata e saborosa. Sua proteína principal.</li>
+        <li><strong>Carne moída/acém (1kg):</strong> ~R$30. Pra variar no meio da semana.</li>
+        <li><strong>Banana (3 cachos):</strong> ~R$15. Potássio ajuda a baixar pressão.</li>
+        <li><strong>Batata (3kg):</strong> ~R$12. Energia barata.</li>
+        <li><strong>Legumes variados (cenoura, chuchu, abóbora, repolho):</strong> ~R$30. Compre na feira.</li>
+        <li><strong>Aveia (1kg):</strong> ~R$10. Fibra que controla fome e pressão.</li>
+        <li><strong>Macarrão (2 pacotes):</strong> ~R$10. Pra variar do arroz.</li>
+        <li><strong>Óleo, alho, sal, temperos:</strong> ~R$20.</li>
+        <li><strong>Leite (4L):</strong> ~R$24.</li>
+        <li><strong>Pão integral:</strong> ~R$12.</li>
+        <li><strong>Frutas da estação (laranja, maçã):</strong> ~R$20.</li>
+        <li><strong>Margem de segurança:</strong> ~R$131 restantes pra verduras extras, uma proteína a mais, ou necessidade do mês.</li>
+      </ul>
+      <p style="margin-top:16px; font-size:13px; color:var(--accent)"><strong>Dica:</strong> Vá na feira no final da tarde (sábado) — os preços caem pela metade. Compre no atacadão (Assaí, Atacadão) pra itens de longa duração.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">🍽️</div>
+        <h3>Cardápio diário modelo<small>Simples, barato e funcional</small></h3>
+      </div>
+      <div class="meal-grid">
+        <div class="meal-card">
+          <h4>Café da manhã <span class="time">6:15</span></h4>
+          <p>2 ovos mexidos (sem óleo, frigideira antiaderente) + 1 banana + café sem açúcar (ou com pouco). OU aveia com leite e banana.</p>
+        </div>
+        <div class="meal-card">
+          <h4>Almoço <span class="time">12:00</span></h4>
+          <p>Arroz (3 colheres) + feijão (1 concha cheia) + frango desfiado ou carne moída + legume cozido (cenoura, batata, chuchu). Prato colorido = prato saudável.</p>
+        </div>
+        <div class="meal-card">
+          <h4>Lanche <span class="time">15:30</span></h4>
+          <p>1 banana + 1 copo de água. Se tiver: um ovo cozido.</p>
+        </div>
+        <div class="meal-card">
+          <h4>Jantar <span class="time">19:30</span></h4>
+          <p>Sopa de legumes com frango desfiado. OU omelete com 2 ovos + cebola + tomate. Porção menor que o almoço.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">🚫</div>
+        <h3>Corte isso da sua vida<small>Não negocie com o que te mata</small></h3>
+      </div>
+      <ul>
+        <li><strong>Refrigerante:</strong> É veneno líquido. Cada lata tem 10 colheres de açúcar. Beba água, água com limão, ou café sem açúcar.</li>
+        <li><strong>Salgadinhos/biscoitos:</strong> Sódio puro. Disparam sua pressão.</li>
+        <li><strong>Pão branco em excesso:</strong> Vira açúcar no sangue. Se comer, no máximo 2 fatias de integral.</li>
+        <li><strong>Fritura:</strong> Faça tudo cozido, grelhado, refogado ou assado. Zero fritura.</li>
+        <li><strong>Açúcar:</strong> Reduza progressivamente. Café sem açúcar, suco sem açúcar. Seu paladar se adapta em 2 semanas.</li>
+        <li><strong>Álcool:</strong> Aumenta pressão, engorda, gasta dinheiro que você não tem.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TREINO -->
+  <div class="section" id="treino">
+    <h2 class="section-title">Treino na Academia</h2>
+    <p class="section-subtitle">Foco em perda de gordura + controle de pressão. Começando do zero com segurança.</p>
+
+    <div class="alert">
+      <h4>⚠️ Aviso importante</h4>
+      <p>Você tem hipertensão. Antes de começar na academia, converse com o professor sobre sua condição. Evite prender a respiração durante os exercícios (manobra de Valsalva). Respire sempre: solta o ar no esforço, puxa no retorno. Comece LEVE.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📅</div>
+        <h3>Divisão semanal<small>5x por semana — Segunda a Sexta</small></h3>
+      </div>
+      <div class="week-grid">
+        <div class="week-day">
+          <h5>Segunda</h5>
+          <p>Peito + Tríceps + Cardio</p>
+        </div>
+        <div class="week-day">
+          <h5>Terça</h5>
+          <p>Costas + Bíceps + Cardio</p>
+        </div>
+        <div class="week-day">
+          <h5>Quarta</h5>
+          <p>Pernas + Cardio</p>
+        </div>
+        <div class="week-day">
+          <h5>Quinta</h5>
+          <p>Ombro + Trapézio + Cardio</p>
+        </div>
+        <div class="week-day">
+          <h5>Sexta</h5>
+          <p>Full body leve + Cardio longo</p>
+        </div>
+        <div class="week-day">
+          <h5>Sábado</h5>
+          <p>Caminhada 40-60 min (ar livre, grátis)</p>
+        </div>
+        <div class="week-day">
+          <h5>Domingo</h5>
+          <p>Descanso total + Igreja</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">🏋️</div>
+        <h3>Estrutura de cada treino<small>~1 hora total</small></h3>
+      </div>
+      <ul>
+        <li><strong>Aquecimento (5 min):</strong> Esteira ou bicicleta em ritmo leve. Prepara o coração.</li>
+        <li><strong>Musculação (35-40 min):</strong> 4-5 exercícios do grupo do dia. 3 séries de 12-15 repetições. Peso moderado — você deve conseguir completar todas as séries. Descanse 60-90 segundos entre séries.</li>
+        <li><strong>Cardio (20 min):</strong> Esteira (caminhada inclinada) ou bicicleta. Ritmo que você consegue conversar mas fica ofegante. Esse é o ritmo que mais queima gordura pra iniciante.</li>
+        <li><strong>Alongamento (5 min):</strong> Alongue todos os músculos trabalhados. Previne lesão.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">📈</div>
+        <h3>Progressão<small>Evolua a cada 2 semanas</small></h3>
+      </div>
+      <ul>
+        <li><strong>Semanas 1-2:</strong> Peso bem leve. Aprenda a forma correta. Peça ajuda ao instrutor.</li>
+        <li><strong>Semanas 3-4:</strong> Aumente levemente a carga. Cardio: de 15 para 20 min.</li>
+        <li><strong>Mês 2:</strong> Aumente a carga nos exercícios. Cardio: 25 min.</li>
+        <li><strong>Mês 3+:</strong> Treinos mais intensos. Cardio: 30 min. Insira HIIT leve (30s rápido / 60s lento) na esteira 1x por semana.</li>
+      </ul>
+      <p style="margin-top:16px; font-size:13px; color:var(--accent)"><strong>Meta realista:</strong> Perder 2-4 kg por mês. Em 6 meses: -15 a -20kg. Isso é saudável e sustentável.</p>
+    </div>
+  </div>
+
+  <!-- SAÚDE -->
+  <div class="section" id="saude">
+    <h2 class="section-title">Saúde & Hipertensão</h2>
+    <p class="section-subtitle">Sua pressão é o sinal de alerta. Trate com seriedade — é reversível.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">🩺</div>
+        <h3>O que fazer AGORA<small>Ações urgentes e gratuitas</small></h3>
+      </div>
+      <ul>
+        <li><strong>Vá na UBS (Unidade Básica de Saúde):</strong> É grátis pelo SUS. Peça consulta com clínico geral. Fale da hipertensão. Eles vão medir sua pressão, pedir exames de sangue e podem receitar medicação gratuita pelo programa Farmácia Popular.</li>
+        <li><strong>Programa Farmácia Popular:</strong> Remédios para pressão alta são GRATUITOS. Losartana, Hidroclorotiazida, Enalapril — todos de graça com receita médica. Não deixe de tomar se o médico receitar.</li>
+        <li><strong>Exames importantes:</strong> Peça na UBS: hemograma, glicemia, colesterol total, triglicerídeos, creatinina e ácido úrico. Todos gratuitos pelo SUS.</li>
+        <li><strong>Meça sua pressão:</strong> Nas farmácias medem de graça. Faça pelo menos 1x por semana. Anote os valores.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">💧</div>
+        <h3>Hábitos que baixam a pressão<small>Sem gastar nada</small></h3>
+      </div>
+      <ul>
+        <li><strong>Beba 2-3 litros de água por dia:</strong> Desidratação aumenta a pressão. Tenha uma garrafa sempre com você.</li>
+        <li><strong>Reduza o sódio (sal):</strong> Máximo 1 colher de chá por dia em toda a comida. Tire o saleiro da mesa.</li>
+        <li><strong>Coma banana todo dia:</strong> O potássio equilibra o sódio e ajuda a baixar a pressão.</li>
+        <li><strong>Pare de fumar</strong> (se fuma): Cigarro + pressão alta = risco altíssimo de AVC jovem.</li>
+        <li><strong>Durma bem:</strong> 7-8h por noite. Sono ruim = pressão alta no dia seguinte.</li>
+        <li><strong>Controle o estresse:</strong> Oração, respiração profunda, caminhada. Estresse crônico é combustível pra hipertensão.</li>
+        <li><strong>Exercício regular:</strong> O exercício é tão eficaz quanto remédio pra pressão. A academia vai ser seu melhor investimento.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">📊</div>
+        <h3>Seus números — Situação atual<small>Onde você está e onde quer chegar</small></h3>
+      </div>
+      <ul>
+        <li><strong>Peso atual:</strong> 110 kg</li>
+        <li><strong>Altura:</strong> 1,73m</li>
+        <li><strong>IMC atual:</strong> 36,7 (Obesidade grau II)</li>
+        <li><strong>Meta 6 meses:</strong> 90-95 kg (IMC ~32 — Obesidade grau I)</li>
+        <li><strong>Meta 12 meses:</strong> 80-85 kg (IMC ~28 — Sobrepeso leve)</li>
+        <li><strong>Meta 18-24 meses:</strong> 73-78 kg (IMC ~25 — Peso normal)</li>
+      </ul>
+      <p style="margin-top:16px; font-size:13px; color:var(--text-dim)">Cada 5kg que você perde, sua pressão melhora significativamente. Aos 85kg, existe grande chance de nem precisar mais de remédio.</p>
+    </div>
+  </div>
+
+  <!-- ESPIRITUAL -->
+  <div class="section" id="espiritual">
+    <h2 class="section-title">Vida Católica</h2>
+    <p class="section-subtitle">Fase 0 — Fundamento Espiritual. Sem santidade, apologética é só vaidade intelectual.</p>
+
+    <div class="verse">
+      "Estai sempre prontos para responder a todo aquele que vos pedir a razão da vossa esperança."
+      <cite>1 Pedro 3,15</cite>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon purple">⛪</div>
+        <h3>Rotina espiritual diária<small>Oração + Sacramentos + Leitura</small></h3>
+      </div>
+      <ul>
+        <li><strong>Manhã (5:45):</strong> Laudes (Liturgia das Horas) + 10 min de oração mental. Consagre o dia a Cristo e a Maria.</li>
+        <li><strong>Rosário:</strong> Diário. Pode ser na caminhada, no transporte, ou antes de dormir. 20 min que sustentam tudo.</li>
+        <li><strong>Leitura espiritual (15 min):</strong> Imitação de Cristo (Kempis) — 1 capítulo por dia. Depois: Filotéia (São Francisco de Sales), Confissões (Santo Agostinho).</li>
+        <li><strong>Noite (21:00):</strong> Vésperas ou Completas + exame de consciência: o que fiz bem? Onde pequei? O que melhoro amanhã?</li>
+        <li><strong>Jaculatórias durante o dia:</strong> "Jesus, manso e humilde de coração, fazei o meu coração semelhante ao Vosso."</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">✝️</div>
+        <h3>Sacramentos & Práticas<small>A vida da graça</small></h3>
+      </div>
+      <ul>
+        <li><strong>Missa dominical:</strong> Inegociável. Se possível, missa diária — mesmo que só 2-3x na semana além do domingo.</li>
+        <li><strong>Confissão:</strong> Quinzenal ou mensal. Procure um padre sólido e peça direção espiritual.</li>
+        <li><strong>Adoração ao Santíssimo:</strong> 1x por semana, se a paróquia oferecer. Mesmo 15 min diante do Tabernáculo transforma.</li>
+        <li><strong>Jejum e penitência:</strong> Sexta-feira: abstenha-se de carne (já é lei da Igreja). Ofereça pequenas mortificações pelo seu crescimento.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">📖</div>
+        <h3>Plano de leitura bíblica<small>Bíblia de Jerusalém ou Ave Maria de Estudo</small></h3>
+      </div>
+      <ul>
+        <li><strong>Mês 1:</strong> Gênesis 1-3 + Evangelho de Mateus (1 capítulo/dia) — junto com o Catecismo.</li>
+        <li><strong>Mês 2:</strong> Evangelho de Marcos + Evangelho de João.</li>
+        <li><strong>Mês 3:</strong> Atos dos Apóstolos + Romanos + Tiago.</li>
+        <li><strong>Mês 4:</strong> Salmos (5 por dia) + Provérbios.</li>
+        <li><strong>Depois:</strong> Siga o plano do cronograma de apologética — Bíblia inteira em 1-2 anos.</li>
+        <li><strong>Memorize passagens-chave:</strong> Mt 16,18-19 (Papado); Jo 6 (Eucaristia); 2Ts 2,15 (Tradição); 1Tm 3,15 (Igreja como coluna da verdade).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">🎧</div>
+        <h3>Recursos católicos gratuitos<small>Formação séria sem pagar nada</small></h3>
+      </div>
+      <ul>
+        <li><strong>Padre Paulo Ricardo:</strong> Cursos e vídeos no YouTube. Estude o método dele de argumentação.</li>
+        <li><strong>Felipe Aquino:</strong> Livros acessíveis de apologética e doutrina.</li>
+        <li><strong>Catecismo da Igreja Católica:</strong> Disponível grátis em vatican.va e no app da CNBB.</li>
+        <li><strong>App iBreviary:</strong> Liturgia das Horas completa, grátis.</li>
+        <li><strong>Fulton Sheen (Life is Worth Living):</strong> No YouTube com legendas — o maior comunicador católico da história.</li>
+        <li><strong>Trent Horn (Catholic Answers):</strong> Debates apologéticos de altíssimo nível.</li>
+      </ul>
+    </div>
+
+    <div class="motivation">
+      <p>"Não vim chamar os justos, mas os pecadores à conversão." — Nosso Senhor Jesus Cristo (Lc 5,32)</p>
+    </div>
+  </div>
+
+  <!-- APOLOGÉTICA -->
+  <div class="section" id="apologetica">
+    <h2 class="section-title">Apologética — Mês 1</h2>
+    <p class="section-subtitle">Foco: Lógica + Fundamentos Doutrinais + Prática de Argumentação. ~1h por dia de estudo.</p>
+
+    <div class="alert">
+      <h4>📚 Materiais do Mês 1 — Conseguir antes de começar</h4>
+      <p>1. Catecismo da Igreja Católica (vatican.va, grátis) · 2. Bíblia de Jerusalém ou Ave Maria de Estudo · 3. Introdução à Lógica (Irving Copi) ou Socratic Logic (Peter Kreeft) · 4. Catolicismo e Fundamentalismo (Karl Keating) ou Para Entender e Viver a Fé (Felipe Aquino) · 5. Imitação de Cristo (Kempis)</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📅</div>
+        <h3>Estrutura diária de estudo<small>Mínimo absoluto: 1h30 nos dias corridos</small></h3>
+      </div>
+      <ul>
+        <li><strong>Lógica (45 min):</strong> Tema do dia — argumentos, silogismos, falácias. É a engrenagem que faz tudo funcionar.</li>
+        <li><strong>Catecismo + Bíblia (30 min):</strong> 15 min Catecismo (com anotações) + 15 min Bíblia com notas.</li>
+        <li><strong>Apologética (30 min):</strong> Livro principal da semana (Keating ou Felipe Aquino).</li>
+        <li><strong>Prática (15 min):</strong> Escrever, sintetizar, ou montar silogismos. Não é estudo se você não consegue explicar pra alguém em 2 minutos.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">1️⃣</div>
+        <h3>Semana 1 — Fundação<small>Por que a fé católica é razoável + como funciona um argumento</small></h3>
+      </div>
+      <ul>
+        <li><strong>Dia 1:</strong> O que é lógica, premissa vs. conclusão. Catecismo §§1-25. Gênesis 1-3. Escreva: "Por que decidi defender a fé católica."</li>
+        <li><strong>Dia 2:</strong> Argumento dedutivo vs. indutivo. Catecismo §§26-49. Mateus 1-2.</li>
+        <li><strong>Dia 3:</strong> Proposições, contradição, contrárias. Catecismo §§50-100. Mateus 3-5.</li>
+        <li><strong>Dia 4:</strong> Silogismo categórico — premissa maior, menor, conclusão. Catecismo §§101-141. Mateus 5-7. Monte 3 silogismos católicos.</li>
+        <li><strong>Dia 5:</strong> As 4 figuras do silogismo, regras de validade. Catecismo §§142-184. Mateus 8-10.</li>
+        <li><strong>Dia 6:</strong> Validade vs. solidez. Catecismo §§185-231. Mateus 11-13.</li>
+        <li><strong>Dia 7 (REVISÃO):</strong> Sem leitura nova. Reveja anotações. Escreva 600-800 palavras: "O que é um argumento bom — e por que importa para defender a fé."</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">2️⃣</div>
+        <h3>Semana 2 — Falácias<small>80% das objeções contra a Igreja são falácias. Aprenda a nomeá-las.</small></h3>
+      </div>
+      <ul>
+        <li><strong>Dia 8:</strong> Ad hominem e variantes. Catecismo §§232-267 (Trindade). Mt 14-16 (atenção a Mt 16,18-19 — Papado).</li>
+        <li><strong>Dia 9:</strong> Espantalho (straw man) — a falácia mais usada contra católicos. Catecismo §§268-314. Liste 5 caricaturas que fazem da nossa fé e a posição REAL.</li>
+        <li><strong>Dia 10:</strong> Apelo à autoridade, à emoção, à ignorância, ad populum. Catecismo §§315-384.</li>
+        <li><strong>Dia 11:</strong> Falso dilema + equívoco. Catecismo §§385-421 (pecado original). Escreva como protestante e católico usam "fé" em sentidos diferentes.</li>
+        <li><strong>Dia 12:</strong> Raciocínio circular, pista falsa, declive escorregadio. Catecismo §§422-478 (Encarnação). Refute: "A Bíblia é a regra de fé porque a Bíblia diz" (falácia circular).</li>
+        <li><strong>Dia 13:</strong> Falácia genética, naturalista, tu quoque. Catecismo §§479-570. Marcos 1-4. Assista 1 debate apologético.</li>
+        <li><strong>Dia 14 (PRODUÇÃO):</strong> Grave vídeo de 5-8 min: "As 3 falácias mais usadas contra a Igreja Católica." Avalie: está claro? Caridoso?</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">3️⃣</div>
+        <h3>Semana 3 — Doutrinas-chave em disputa<small>Domine a ponto de explicar em 60 segundos cada</small></h3>
+      </div>
+      <ul>
+        <li><strong>Dia 15 — Sola Scriptura:</strong> 2Tm 3,16-17 vs. 2Ts 2,15. Leia Keating sobre o tema DUAS VEZES. Refute em 400 palavras.</li>
+        <li><strong>Dia 16 — Cânon Bíblico:</strong> Quem decidiu os livros da Bíblia? Hipona (393), Cartago (397), Trento (1546). Lutero retirou 7 — nós não "adicionamos".</li>
+        <li><strong>Dia 17 — Tradição e Magistério:</strong> A Igreja é ANTERIOR ao Novo Testamento. Uma das defesas mais poderosas. Roteiro de 3 min.</li>
+        <li><strong>Dia 18 — Papado:</strong> Mt 16,13-19; Lc 22,31-32; Jo 21,15-17. Pais da Igreja: Inácio, Ireneu, Cipriano.</li>
+        <li><strong>Dia 19 — Eucaristia:</strong> João 6 inteiro + 1Cor 11,23-29. Catecismo §§1322-1419. Presença Real com Inácio de Antioquia e Justino Mártir.</li>
+        <li><strong>Dia 20 — Mariologia:</strong> Latria vs. dulia vs. hiperdulia. Os 4 dogmas marianos. Lc 1,26-56; Jo 19,25-27; Ap 12.</li>
+        <li><strong>Dia 21 (DEBATE):</strong> Encontre alguém para diálogo real (protestante, ateu, espírita). Não para vencer — para escutar. Anote o que não soube responder.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon purple">4️⃣</div>
+        <h3>Semana 4 — Objeções comuns + Produção<small>Responda o que você ouve toda semana</small></h3>
+      </div>
+      <ul>
+        <li><strong>Dia 22:</strong> "Católicos adoram imagens" — Êx 25,18-22 (Deus mandou fazer querubins!), II Concílio de Niceia (787).</li>
+        <li><strong>Dia 23:</strong> "Por que confessar a um padre?" — Jo 20,21-23; Tg 5,16.</li>
+        <li><strong>Dia 24:</strong> Purgatório — 2Mac 12,42-46; 1Cor 3,11-15; Ap 21,27.</li>
+        <li><strong>Dia 25:</strong> Indulgências — o que REALMENTE é. Como Lutero distorceu.</li>
+        <li><strong>Dia 26:</strong> "Catolicismo é paganismo" — Êx 25-31 (Deus prescreve ritual detalhado).</li>
+        <li><strong>Dia 27:</strong> Celibato sacerdotal — Mt 19,11-12; 1Cor 7,32-35. Disciplina, não dogma.</li>
+        <li><strong>Dia 28:</strong> Grave 3 vídeos curtos (5 min) sobre 3 temas da semana. Publique pelo menos 1.</li>
+        <li><strong>Dia 29:</strong> Autoavaliação honesta por escrito. Defina 3 prioridades pro Mês 2.</li>
+        <li><strong>Dia 30:</strong> Recolhimento: Missa + adoração + confissão + Rosário inteiro. Sem estudo. Escreva plano do Mês 2.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">🗺️</div>
+        <h3>Visão geral — Os 7 pilares (7-10 anos)<small>Onde o Mês 1 se encaixa no plano completo</small></h3>
+      </div>
+      <ul>
+        <li><strong>Fase 0 (permanente):</strong> Vida espiritual sólida — oração, sacramentos, santidade.</li>
+        <li><strong>Fase 1 (6-12 meses):</strong> Bíblia inteira + Catecismo + Lógica + Apologética introdutória. ← VOCÊ ESTÁ AQUI</li>
+        <li><strong>Fase 2 (1-2 anos):</strong> Filosofia sólida — Platão, Aristóteles, Santo Agostinho, São Tomás de Aquino (Suma Teológica).</li>
+        <li><strong>Fase 3 (2-3 anos):</strong> Teologia sistemática — Cristologia, Eclesiologia, Mariologia, Sacramentos.</li>
+        <li><strong>Fase 4 (paralelo):</strong> Escritura em profundidade + Latim + Grego koiné.</li>
+        <li><strong>Fase 5 (1-2 anos):</strong> História da Igreja completa.</li>
+        <li><strong>Fase 6:</strong> Conhecimento profundo dos adversários reais (protestantismo, espiritismo, ateísmo, Islã).</li>
+        <li><strong>Fase 7+:</strong> Retórica, oratória, escrita, mídia digital, idiomas, tópicos contemporâneos.</li>
+      </ul>
+      <p style="margin-top:16px; font-size:13px; color:var(--accent)"><strong>Regra de ouro:</strong> Não pule a oração. Não pule a lógica. Anote tudo. Releia. Pratique. Caridade sempre. Constância de 80% por 5 anos > intensidade de 100% por 2 meses.</p>
+    </div>
+  </div>
+
+  <!-- PROSPECÇÃO -->
+  <div class="section" id="prospeccao">
+    <h2 class="section-title">Prospecção de Clientes</h2>
+    <p class="section-subtitle">Você é designer social media e usa Photoshop. Agora precisa de clientes pagando todo mês.</p>
+
+    <div class="alert">
+      <h4>🎯 A regra de ouro da prospecção</h4>
+      <p>Prospectar não é "quando sobrar tempo". É TODO DIA, 30-60 min, no mesmo horário, como escovar os dentes. Quem prospecta todo dia nunca fica sem cliente.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📋</div>
+        <h3>Rotina diária de prospecção<small>30-60 min por dia, de segunda a sexta</small></h3>
+      </div>
+      <ul>
+        <li><strong>10 min — Pesquisa:</strong> Abra o Google Maps ou Instagram e procure negócios da sua região (Francisco Morato, Franco da Rocha, Caieiras, SP) que têm redes sociais fracas: fotos ruins, posts antigos, sem identidade visual. Esses são seus alvos.</li>
+        <li><strong>20 min — Abordagem:</strong> Mande mensagem para 5-10 negócios por dia. Via Instagram DM, WhatsApp (se tiver o número), ou vá presencialmente. A mensagem deve ser curta e direta (ver modelo abaixo).</li>
+        <li><strong>10 min — Follow-up:</strong> Recontacte quem você abordou há 2-3 dias e não respondeu. Uma mensagem educada: "Oi, [nome]! Só passando pra ver se teve a chance de ver minha mensagem. Fico à disposição!"</li>
+        <li><strong>10 min — Portfólio:</strong> Poste 1 arte no seu Instagram profissional. Todo dia. Seu feed É seu currículo.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">💬</div>
+        <h3>Modelo de abordagem<small>Copie, adapte e use</small></h3>
+      </div>
+      <div class="meal-card" style="margin-bottom:12px">
+        <h4>DM / WhatsApp — Fria (não te conhecem)</h4>
+        <p>"Oi, [nome do negócio]! Tudo bem? Sou o [seu nome], designer de social media aqui da região. Vi o perfil de vocês e achei o trabalho muito legal. Tenho umas ideias que poderiam deixar o visual do Instagram de vocês ainda mais profissional e atrair mais clientes. Posso mandar uma amostra grátis do que eu faria? Sem compromisso!"</p>
+      </div>
+      <div class="meal-card" style="margin-bottom:12px">
+        <h4>Presencial — Comércios do bairro</h4>
+        <p>"Bom dia! Eu sou o [seu nome], trabalho com design pra redes sociais. Vim deixar meu cartão e mostrar um portfólio rápido. Se vocês precisarem de artes pro Instagram, cardápio digital, banner, cartão de visita — eu faço tudo. Posso fazer uma arte de teste de graça pra vocês verem a qualidade."</p>
+      </div>
+      <div class="meal-card">
+        <h4>A técnica da "amostra grátis"</h4>
+        <p>Faça 1 arte de demonstração gratuita para o negócio ANTES de cobrar. Isso mostra seu trabalho e cria compromisso. 8 em cada 10 negócios que recebem uma arte pronta e bonita fecham contrato.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">🎯</div>
+        <h3>Onde encontrar clientes<small>Do mais fácil ao mais lucrativo</small></h3>
+      </div>
+      <ul>
+        <li><strong>Comércios do bairro:</strong> Padaria, barbearia, loja de roupa, pet shop, restaurante, academia, oficina. Vá pessoalmente. A maioria nem tem designer — você resolve um problema real.</li>
+        <li><strong>Instagram local:</strong> Busque hashtags como #franciscomorato #francodarocha #comérciolocal. Siga negócios, comente nas fotos deles (sem spam), e depois mande DM.</li>
+        <li><strong>Grupos de WhatsApp/Facebook:</strong> Grupos de bairro, grupos de empreendedores. Poste seu trabalho, ofereça promoções pra quem fechar no mês.</li>
+        <li><strong>Indicação:</strong> Após o primeiro cliente satisfeito, peça indicação. Ofereça 1 arte grátis pra quem indicar cliente novo que fechar.</li>
+        <li><strong>Freelance online:</strong> 99Freelas, Workana, Fiverr. Mais competitivo, mas gera renda extra quando os locais estão quietos.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon purple">💰</div>
+        <h3>Tabela de preços sugerida<small>Pra região de SP — ajuste conforme o mercado</small></h3>
+      </div>
+      <ul>
+        <li><strong>Pacote mensal básico (8-12 posts):</strong> R$300-500/mês por cliente.</li>
+        <li><strong>Pacote mensal completo (20-30 posts + stories):</strong> R$500-800/mês.</li>
+        <li><strong>Artes avulsas (banner, cardápio, cartão):</strong> R$30-80 cada.</li>
+        <li><strong>Logo + identidade visual:</strong> R$200-500.</li>
+        <li><strong>Meta realista:</strong> Com 3 clientes fixos a R$400/mês = R$1.200/mês SÓ de social media + seu salário de R$1.500 = R$2.700/mês. Em 6 meses isso é possível.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📊</div>
+        <h3>Metas de prospecção<small>Números que transformam</small></h3>
+      </div>
+      <ul>
+        <li><strong>Semana 1:</strong> Montar portfólio com 10-15 artes no Instagram profissional. Abordar 20 negócios.</li>
+        <li><strong>Semana 2:</strong> Continuar abordando + fazer 2-3 amostras grátis pros mais promissores.</li>
+        <li><strong>Mês 1:</strong> Fechar pelo menos 1 cliente fixo mensal.</li>
+        <li><strong>Mês 2:</strong> 2 clientes fixos.</li>
+        <li><strong>Mês 3:</strong> 3+ clientes fixos. A partir daqui, indicação começa a trabalhar por você.</li>
+        <li><strong>Mês 6:</strong> 5+ clientes. Comece a pensar em subir os preços pra clientes novos.</li>
+      </ul>
+    </div>
+
+    <div class="motivation">
+      <p>"Prospectar é plantar. Você não colhe no dia que planta — mas quem planta todo dia, nunca passa fome."</p>
+    </div>
+  </div>
+
+  <!-- FINANCEIRO -->
+  <div class="section" id="financeiro">
+    <h2 class="section-title">Financeiro</h2>
+    <p class="section-subtitle">R$1.500 por mês. Apertado, mas com organização dá pra viver, investir em saúde e ainda guardar.</p>
+
+    <div class="alert">
+      <h4>⚠️ Regra número 1</h4>
+      <p>Anote TUDO que gastar. Use um caderno ou o app "Mobills" (grátis). Dinheiro que você não rastreia é dinheiro que some. Quem controla o dinheiro, controla a vida.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">📊</div>
+        <h3>Orçamento mensal — R$1.500<small>Cada real tem um destino</small></h3>
+      </div>
+      <ul>
+        <li><strong>🍚 Alimentação:</strong> R$450 — Arroz, feijão, ovos, frango, legumes da feira, aveia, banana. Cozinhe em casa SEMPRE. Marmita pro trabalho. Comer fora é jogar dinheiro no lixo.</li>
+        <li><strong>🏠 Moradia (aluguel/contas):</strong> R$400 — Se mora com família, contribua com o que puder. Se paga aluguel, esse é o teto.</li>
+        <li><strong>🚌 Transporte:</strong> R$200 — Ônibus, combustível ou manutenção. Se puder ir a pé ou de bike, esse valor vira economia.</li>
+        <li><strong>💪 Academia:</strong> R$100 — Seu remédio mensal. Não é gasto, é investimento na sua saúde.</li>
+        <li><strong>🧴 Higiene/pessoal:</strong> R$50 — Sabonete, pasta de dente, desodorante, barbeador. Compre no atacadão.</li>
+        <li><strong>📱 Celular/internet:</strong> R$50 — Plano básico. Precisa pra trabalho e estudos.</li>
+        <li><strong>💰 Reserva de emergência:</strong> R$150 — NÃO TOQUE. Guarde todo mês sem falta. Em 6 meses = R$900. Em 1 ano = R$1.800. Isso te salva de dívida quando surgir imprevisto.</li>
+        <li><strong>🎯 Margem livre:</strong> R$100 — Pra imprevistos do mês. O que sobrar, junta na reserva.</li>
+      </ul>
+      <p style="margin-top:16px; font-size:13px; color:var(--accent)"><strong>Total:</strong> R$1.500 ✓ — Tudo encaixado, sem sobrar e sem faltar.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">🚫</div>
+        <h3>Corte esses gastos<small>Vazamentos invisíveis de dinheiro</small></h3>
+      </div>
+      <ul>
+        <li><strong>Delivery (iFood):</strong> Um lanche de R$25 por semana = R$100/mês jogado fora. Cozinhe.</li>
+        <li><strong>Besteiras (salgadinho, doce, refrigerante):</strong> Além de te matar, come seu orçamento. R$5/dia = R$150/mês.</li>
+        <li><strong>Cigarro:</strong> Se fuma, um maço/dia = R$300-400/mês. Pare e sua saúde E seu bolso agradecem.</li>
+        <li><strong>Apostas/jogos:</strong> Não existe dinheiro fácil. Cada real apostado é um real roubado da sua família futura.</li>
+        <li><strong>Assinaturas desnecessárias:</strong> Streaming, app premium. Se não usa todo dia, cancela.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📈</div>
+        <h3>Plano de crescimento<small>De R$1.500 pra mais</small></h3>
+      </div>
+      <ul>
+        <li><strong>Curto prazo (1-3 meses):</strong> Estabilize seus gastos. Zere qualquer dívida pequena. Comece a reserva de emergência. Feche 1-2 clientes de social media.</li>
+        <li><strong>Médio prazo (3-6 meses):</strong> 3-5 clientes fixos de design = +R$1.200-2.000/mês extra. Total: R$2.700-3.500/mês. Aprenda tráfego pago (Meta Ads) pra cobrar mais.</li>
+        <li><strong>Longo prazo (6-12 meses):</strong> Comece a oferecer identidade visual e gestão de tráfego. Suba os preços pra clientes novos. Mire em R$4.000-5.000/mês total.</li>
+        <li><strong>Renda extra imediata:</strong> Artes avulsas (R$30-80), logos (R$200-500), cardápios digitais (R$50-100). Todo extra vai pra reserva.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">💡</div>
+        <h3>Dicas pra economizar<small>Pequenos hábitos, grande impacto</small></h3>
+      </div>
+      <ul>
+        <li><strong>Feira no sábado à tarde:</strong> Preços caem pela metade. Compre legumes e frutas da estação.</li>
+        <li><strong>Compre no atacadão:</strong> Arroz, feijão, óleo, produtos de limpeza — tudo mais barato em quantidade.</li>
+        <li><strong>Cozinhe em lote no domingo:</strong> Faça arroz, feijão e frango pra semana toda. Congele em porções. Economiza gás e tempo.</li>
+        <li><strong>Leve marmita pro trabalho:</strong> Almoço fora custa R$15-20. Marmita custa R$4-5. São R$300/mês de economia.</li>
+        <li><strong>Água da torneira:</strong> Se a água da sua região for tratada, use filtro de barro. Galão de água é gasto desnecessário.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ESTUDOS -->
+  <div class="section" id="estudos">
+    <h2 class="section-title">Design & Evolução Profissional</h2>
+    <p class="section-subtitle">Você já trabalha com Photoshop. Agora é hora de ficar tão bom que ninguém vai querer te substituir.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon purple">🎨</div>
+        <h3>Evolução no Photoshop<small>De bom a excelente — 30 min/dia</small></h3>
+      </div>
+      <ul>
+        <li><strong>Mês 1-2:</strong> Domine manipulação de imagens, máscaras de camada, blend modes, Smart Objects. Assista 1 tutorial avançado por dia (YouTube: Brainstorm Tutoriais, Nathaniel Dodson).</li>
+        <li><strong>Mês 3-4:</strong> Composição visual, tipografia avançada, grids e hierarquia visual. Recrie 1 arte profissional por dia — copie pra aprender, depois crie seu estilo.</li>
+        <li><strong>Mês 5-6:</strong> Motion graphics básico (After Effects introdução), mockups realistas, efeitos 3D no Photoshop. Isso te diferencia de 90% dos designers de social media.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📈</div>
+        <h3>Habilidades que aumentam seu valor<small>Quanto mais você sabe, mais cobra</small></h3>
+      </div>
+      <ul>
+        <li><strong>Identidade visual:</strong> Aprenda a criar logos, paletas de cor, tipografia de marca. Passa de "faz postinho" pra "cria a marca inteira". Cobra R$300-500 por projeto.</li>
+        <li><strong>Copywriting básico:</strong> O designer que escreve boas legendas vale o dobro. Estude: "Copywriting na Prática" no YouTube.</li>
+        <li><strong>Tráfego pago (Meta Ads):</strong> Se você faz a arte E sabe rodar anúncio, você é uma agência de 1 pessoa. Curso grátis: Meta Blueprint.</li>
+        <li><strong>Figma:</strong> Grátis. Complementa o Photoshop pra UI/UX e prototipagem. O mercado está pedindo cada vez mais.</li>
+        <li><strong>Canva Pro:</strong> Pra entregas rápidas e templates editáveis que o cliente pode reusar. Não substitui Photoshop, mas complementa.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">🆓</div>
+        <h3>Recursos gratuitos<small>Tudo que você precisa sem pagar nada</small></h3>
+      </div>
+      <ul>
+        <li><strong>YouTube:</strong> Brainstorm Tutoriais, Walter Mattos, Chief of Design, Nathaniel Dodson (Tutvid).</li>
+        <li><strong>Behance + Dribbble:</strong> Referências visuais infinitas. Olhe todo dia, salve o que te inspira.</li>
+        <li><strong>Google Fonts + Adobe Fonts:</strong> Tipografias profissionais gratuitas.</li>
+        <li><strong>Unsplash + Pexels:</strong> Fotos profissionais de graça pra usar nas artes.</li>
+        <li><strong>Fundação Bradesco (EV):</strong> Cursos de design gráfico e marketing com certificado.</li>
+        <li><strong>Meta Blueprint:</strong> Curso oficial e gratuito de Meta Ads (Facebook e Instagram).</li>
+        <li><strong>Origamid:</strong> Cursos de design e front-end com base teórica forte (alguns gratuitos).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">📱</div>
+        <h3>Seu portfólio no Instagram<small>Seu feed é seu currículo — trate assim</small></h3>
+      </div>
+      <ul>
+        <li><strong>Crie um perfil profissional separado:</strong> @seunoome.design ou @seunome.criativo. Bio clara: "Designer Social Media | Photoshop | [sua cidade]".</li>
+        <li><strong>Poste 1 arte por dia:</strong> Mesmo que seja estudo ou recriação. Consistência atrai seguidores e clientes.</li>
+        <li><strong>Mostre o processo:</strong> Reels mostrando antes/depois, timelapse do Photoshop, mockups. Isso viraliza.</li>
+        <li><strong>Destaques organizados:</strong> "Portfólio", "Depoimentos", "Preços", "Contato".</li>
+        <li><strong>Meta:</strong> 50 artes postadas no primeiro mês. Em 3 meses, seu feed fala por você.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section" id="checklist">
+    <h2 class="section-title">Checklist Diário</h2>
+    <p class="section-subtitle">Marque cada item todo dia. Consistência é o que separa quem transforma a vida de quem só planeja.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">✅</div>
+        <h3>Hoje eu...<small>Resete todo dia e comece de novo</small></h3>
+      </div>
+      <div class="checklist">
+        <label><input type="checkbox"> Acordei no horário (5:30)</label>
+        <label><input type="checkbox"> Bebi 2 copos de água ao acordar</label>
+        <label><input type="checkbox"> Laudes + oração mental + leitura espiritual</label>
+        <label><input type="checkbox"> Tomei café da manhã saudável</label>
+        <label><input type="checkbox"> Trabalhei focado nas entregas de design</label>
+        <label><input type="checkbox"> Prospectei clientes (mínimo 5 abordagens)</label>
+        <label><input type="checkbox"> Almocei sem exagero e sem refrigerante</label>
+        <label><input type="checkbox"> Fui na academia / fiz exercício</label>
+        <label><input type="checkbox"> Jantei leve</label>
+        <label><input type="checkbox"> Estudei apologética (lógica + catecismo + bíblia)</label>
+        <label><input type="checkbox"> Rezei o Rosário</label>
+        <label><input type="checkbox"> Postei 1 arte no portfólio do Instagram</label>
+        <label><input type="checkbox"> Bebi pelo menos 2L de água no dia</label>
+        <label><input type="checkbox"> Não comi fritura / não bebi refrigerante</label>
+        <label><input type="checkbox"> Dormi até 22:00</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon yellow">🎯</div>
+        <h3>Primeira semana — Missões<small>Comece por aqui</small></h3>
+      </div>
+      <div class="checklist">
+        <label><input type="checkbox"> Marquei consulta na UBS (SUS)</label>
+        <label><input type="checkbox"> Medi minha pressão na farmácia</label>
+        <label><input type="checkbox"> Me matriculei na academia</label>
+        <label><input type="checkbox"> Baixei o app iBreviary (Liturgia das Horas)</label>
+        <label><input type="checkbox"> Consegui o Catecismo (vatican.va ou app CNBB)</label>
+        <label><input type="checkbox"> Consegui o livro de Lógica (Copi ou Kreeft)</label>
+        <label><input type="checkbox"> Criei meu Instagram profissional de design</label>
+        <label><input type="checkbox"> Abordei 10 negócios oferecendo meu trabalho</label>
+        <label><input type="checkbox"> Fiz minha lista de compras inteligente</label>
+        <label><input type="checkbox"> Tirei o refrigerante de casa</label>
+        <label><input type="checkbox"> Defini meu horário de dormir e acordar</label>
+        <label><input type="checkbox"> Procurei paróquia com Missa em horário acessível</label>
+      </div>
+    </div>
+
+    <div class="motivation">
+      <p>"Daqui a 1 ano, você vai agradecer por ter começado hoje. O apologista, o designer, o homem saudável, o pai de família — tudo está sendo forjado agora, nesse momento. Ad maiorem Dei gloriam."</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+      window.scrollTo({ top: document.querySelector('.tabs').offsetTop - 10, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
